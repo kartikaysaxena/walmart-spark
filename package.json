@@ -1,0 +1,25 @@
+{
+    "name": "BecknProtocolCore",
+    "version": "1.0.0",
+    "description": "NodeJS Express Boilerplate",
+    "main": "server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "dependencies": {
+        "compress-json": "^2.1.2",
+        "cookie-parser": "1.4.5",
+        "cors": "2.8.5",
+        "ejs": "^3.1.9",
+        "express": "4.17.1",
+        "json-schema-ref-parser": "^9.0.9",
+        "lz-string": "^1.5.0",
+        "morgan": "1.10.0",
+        "multer": "1.4.2",
+        "pako": "^2.1.0",
+        "qrcode": "^1.5.3",
+        "yaml": "^2.3.1",
+        "zlib": "^1.0.5"
+    }
+}

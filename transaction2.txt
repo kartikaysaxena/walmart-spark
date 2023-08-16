@@ -1,0 +1,1864 @@
+openapi: 3.0.0
+info:
+  title: Beckn Protocol Core
+  version: 1.1.0
+security:
+  - SubscriberAuth: []
+paths:
+  /search:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+        - Beckn Gateway (BG)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - search
+                message:
+                  type: object
+                  properties:
+                    intent:
+                      $ref: '#/components/schemas/Intent'
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /select:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - select
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /init:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - init
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+              required:
+                - context
+                - message
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      ack:
+                        allOf:
+                          - $ref: '#/components/schemas/Ack'
+                          - properties:
+                              status:
+                                enum:
+                                  - ACK
+                                  - NACK
+                    required:
+                      - ack
+                  error:
+                    $ref: '#/components/schemas/Error'
+                required:
+                  - message
+  /confirm:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - confirm
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /status:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - status
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order_id:
+                      $ref: '#/components/schemas/Order/properties/id'
+                  required:
+                    - order_id
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /track:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - track
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order_id:
+                      $ref: '#/components/schemas/Order/properties/id'
+                    callback_url:
+                      type: string
+                      format: uri
+                  required:
+                    - order_id
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /cancel:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - cancel
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order_id:
+                      $ref: '#/components/schemas/Order/properties/id'
+                    cancellation_reason_id:
+                      $ref: '#/components/schemas/Option/properties/id'
+                    descriptor:
+                      $ref: '#/components/schemas/Descriptor'
+                  required:
+                    - order_id
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /update:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - update
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    update_target:
+                      type: string
+                    order:
+                      allOf:
+                        - $ref: '#/components/schemas/Order'
+                  required:
+                    - update_target
+                    - order
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /rating:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - rating
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    ratings:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Rating'
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /support:
+    post:
+      tags:
+        - Beckn Provider Platform (BPP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - support
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    support:
+                      $ref: '#/components/schemas/Support'
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_search:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+        - Beckn Gateway (BG)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_search
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    catalog:
+                      $ref: '#/components/schemas/Catalog'
+                  required:
+                    - catalog
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_select:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_select
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_init:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_init
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_confirm:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_confirm
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_track:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_track
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    tracking:
+                      $ref: '#/components/schemas/Tracking'
+                  required:
+                    - tracking
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_cancel:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_cancel
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_update:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_update
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_status:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_status
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    order:
+                      $ref: '#/components/schemas/Order'
+                  required:
+                    - order
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_rating:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_rating
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    feedback_form:
+                      allOf:
+                        - $ref: '#/components/schemas/XInput'
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+                - message
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+  /on_support:
+    post:
+      tags:
+        - Beckn Application Platform (BAP)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  allOf:
+                    - $ref: '#/components/schemas/Context'
+                    - properties:
+                        action:
+                          enum:
+                            - on_support
+                      required:
+                        - action
+                message:
+                  type: object
+                  properties:
+                    support:
+                      $ref: '#/components/schemas/Support'
+                error:
+                  $ref: '#/components/schemas/Error'
+              required:
+                - context
+      responses:
+        default:
+          $ref: '#/paths/~1init/post/responses/default'
+components:
+  securitySchemes:
+    SubscriberAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    Ack:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ACK
+            - NACK
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    AddOn:
+      type: object
+      properties:
+        id:
+          type: string
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        price:
+          $ref: '#/components/schemas/Price'
+    Address:
+      type: string
+    Agent:
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        contact:
+          $ref: '#/components/schemas/Contact'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        rating:
+          $ref: '#/components/schemas/Rating/properties/value'
+    Authorization:
+      type: object
+      properties:
+        type:
+          type: string
+        token:
+          type: string
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+        status:
+          type: string
+    Billing:
+      type: object
+      properties:
+        name:
+          type: string
+        organization:
+          allOf:
+            - $ref: '#/components/schemas/Organization'
+        address:
+          allOf:
+            - $ref: '#/components/schemas/Address'
+        state:
+          allOf:
+            - $ref: '#/components/schemas/State'
+        city:
+          allOf:
+            - $ref: '#/components/schemas/City'
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        time:
+          allOf:
+            - $ref: '#/components/schemas/Time'
+        tax_id:
+          type: string
+    Cancellation:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+        cancelled_by:
+          type: string
+          enum:
+            - CONSUMER
+            - PROVIDER
+        reason:
+          allOf:
+            - $ref: '#/components/schemas/Option'
+          allOf:
+            - $ref: '#/components/schemas/Descriptor'
+    CancellationTerm:
+      type: object
+      properties:
+        fulfillment_state:
+          allOf:
+            - $ref: '#/components/schemas/FulfillmentState'
+        reason_required:
+          type: boolean
+        cancel_by:
+          allOf:
+            - $ref: '#/components/schemas/Time'
+        cancellation_fee:
+          $ref: '#/components/schemas/Fee'
+        xinput:
+          $ref: '#/components/schemas/XInput'
+        external_ref:
+          $ref: '#/components/schemas/MediaFile'
+    Catalog:
+      type: object
+      properties:
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        fulfillments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offer'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Provider'
+        exp:
+          type: string
+          format: date-time
+        ttl:
+          type: string
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        parent_category_id:
+          $ref: '#/components/schemas/Category/properties/id'
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        time:
+          $ref: '#/components/schemas/Time'
+        ttl:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Circle:
+      type: object
+      properties:
+        gps:
+          $ref: '#/components/schemas/Gps'
+        radius:
+          $ref: '#/components/schemas/Scalar'
+    City:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+    Contact:
+      type: object
+      properties:
+        phone:
+          type: string
+        email:
+          type: string
+        jcard:
+          type: object
+    Context:
+      type: object
+      properties:
+        domain:
+          allOf:
+        location:
+          allOf:
+        action:
+          type: string
+        version:
+          type: string
+        bap_id:
+          allOf:
+              type: string
+        bap_uri:
+          allOf:
+              type: string
+              format: uri
+        bpp_id:
+          allOf:
+        bpp_uri:
+          allOf:
+        transaction_id:
+          type: string
+          format: uuid
+        message_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        key:
+          type: string
+        ttl:
+          type: string
+    Country:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+    Credential:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          default: VerifiableCredential
+        url:
+          type: string
+          format: uri
+    Customer:
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        contact:
+          $ref: '#/components/schemas/Contact'
+    DecimalValue:
+      type: string
+      pattern: '[+-]?([0-9]*[.])?[0-9]+'
+    Descriptor:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        short_desc:
+          type: string
+        long_desc:
+          type: string
+        additional_desc:
+          type: object
+          properties:
+            url:
+              type: string
+            content_type:
+              type: string
+              enum:
+                - text/plain
+                - text/html
+                - application/json
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFile'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    Domain:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+        additional_info:
+          allOf:
+            - $ref: '#/components/schemas/MediaFile'
+    Duration:
+      type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        paths:
+          type: string
+        message:
+          type: string
+    Fee:
+      type: object
+      properties:
+        percentage:
+          allOf:
+            - $ref: '#/components/schemas/DecimalValue'
+        amount:
+          allOf:
+            - $ref: '#/components/schemas/Price'
+    Form:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        data:
+          type: object
+          additionalProperties:
+            type: string
+        mime_type:
+          type: string
+          enum:
+            - text/html
+            - application/xml
+        submission_id:
+          type: string
+          format: uuid
+    Fulfillment:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        rateable:
+          type: boolean
+        rating:
+          allOf:
+        state:
+          allOf:
+            - $ref: '#/components/schemas/FulfillmentState'
+        tracking:
+          type: boolean
+          default: false
+        customer:
+          allOf:
+            - $ref: '#/components/schemas/Customer'
+        agent:
+          allOf:
+            - $ref: '#/components/schemas/Agent'
+        contact:
+          $ref: '#/components/schemas/Contact'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stop'
+        path:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    FulfillmentState:
+      type: object
+      properties:
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        updated_at:
+          type: string
+          format: date-time
+        updated_by:
+          type: string
+    Gps:
+      type: string
+      pattern: '^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$'
+    Image:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        size_type:
+          type: string
+          enum:
+            - xs
+            - sm
+            - md
+            - lg
+            - xl
+            - custom
+        width:
+          type: string
+        height:
+          type: string
+    Intent:
+      type: object
+      properties:
+        descriptor:
+          allOf:
+            - $ref: '#/components/schemas/Descriptor'
+        provider:
+          allOf:
+            - $ref: '#/components/schemas/Provider'
+        fulfillment:
+          allOf:
+            - $ref: '#/components/schemas/Fulfillment'
+        payment:
+          allOf:
+            - $ref: '#/components/schemas/Payment'
+        category:
+          allOf:
+            - $ref: '#/components/schemas/Category'
+        offer:
+          allOf:
+            - $ref: '#/components/schemas/Offer'
+        item:
+          allOf:
+            - $ref: '#/components/schemas/Item'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    ItemQuantity:
+      type: object
+      properties:
+        allocated:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+            measure:
+              $ref: '#/components/schemas/Scalar'
+        available:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+            measure:
+              $ref: '#/components/schemas/Scalar'
+        maximum:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 1
+            measure:
+              $ref: '#/components/schemas/Scalar'
+        minimum:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+            measure:
+              $ref: '#/components/schemas/Scalar'
+        selected:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+            measure:
+              $ref: '#/components/schemas/Scalar'
+        unitized:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 1
+              maximum: 1
+            measure:
+              $ref: '#/components/schemas/Scalar'
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        parent_item_id:
+          allOf:
+            - $ref: '#/components/schemas/Item/properties/id'
+        parent_item_quantity:
+          allOf:
+            - $ref: '#/components/schemas/ItemQuantity'
+        descriptor:
+          allOf:
+            - $ref: '#/components/schemas/Descriptor'
+        creator:
+          allOf:
+            - $ref: '#/components/schemas/Organization'
+        price:
+          allOf:
+            - $ref: '#/components/schemas/Price'
+        quantity:
+          allOf:
+            - $ref: '#/components/schemas/ItemQuantity'
+        category_ids:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Category/properties/id'
+        fulfillment_ids:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Fulfillment/properties/id'
+        location_ids:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Location/properties/id'
+        payment_ids:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Payment/properties/id'
+        add_ons:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddOn'
+        cancellation_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CancellationTerm'
+        refund_terms:
+          type: array
+          items:
+            type: object
+            properties:
+              fulfillment_state:
+                allOf:
+                  - $ref: '#/components/schemas/State'
+              refund_eligible:
+                type: boolean
+              refund_within:
+                allOf:
+                  - $ref: '#/components/schemas/Time'
+              refund_amount:
+                $ref: '#/components/schemas/Price'
+        replacement_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReplacementTerm'
+        return_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnTerm'
+        xinput:
+          allOf:
+            - $ref: '#/components/schemas/XInput'
+        time:
+          allOf:
+            - $ref: '#/components/schemas/Time'
+        rateable:
+          type: boolean
+        rating:
+          allOf:
+            - $ref: '#/components/schemas/Rating/properties/value'
+        matched:
+          type: boolean
+        related:
+          type: boolean
+        recommended:
+          type: boolean
+        ttl:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Location:
+      type: object
+      properties:
+        id:
+          type: string
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        map_url:
+          type: string
+          format: uri
+        gps:
+          allOf:
+            - $ref: '#/components/schemas/Gps'
+        address:
+          allOf:
+            - $ref: '#/components/schemas/Address'
+        city:
+          allOf:
+            - $ref: '#/components/schemas/City'
+        district:
+          type: string
+        state:
+          allOf:
+            - $ref: '#/components/schemas/State'
+        country:
+          allOf:
+            - $ref: '#/components/schemas/Country'
+        area_code:
+          type: string
+        circle:
+          $ref: '#/components/schemas/Circle'
+        polygon:
+          type: string
+        3dspace:
+          type: string
+        rating:
+          allOf:
+            - $ref: '#/components/schemas/Rating/properties/value'
+    MediaFile:
+      type: object
+      properties:
+        mimetype:
+          type: string
+        url:
+          type: string
+          format: uri
+        signature:
+          type: string
+        dsa:
+          type: string
+    Offer:
+      type: object
+      properties:
+        id:
+          type: string
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        location_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location/properties/id'
+        category_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category/properties/id'
+        item_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item/properties/id'
+        time:
+          $ref: '#/components/schemas/Time'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Option:
+      type: object
+      properties:
+        id:
+          type: string
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        ref_order_ids:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - COMPLETE
+            - CANCELLED
+        type:
+          type: string
+          default: DEFAULT
+          enum:
+            - DRAFT
+            - DEFAULT
+        provider:
+          allOf:
+            - $ref: '#/components/schemas/Provider'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        add_ons:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddOn'
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offer'
+        billing:
+          allOf:
+            - $ref: '#/components/schemas/Billing'
+        fulfillments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+        cancellation:
+          allOf:
+            - $ref: '#/components/schemas/Cancellation'
+        cancellation_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CancellationTerm'
+        refund_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item/properties/refund_terms/items'
+        replacement_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReplacementTerm'
+        return_terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnTerm'
+        quote:
+          allOf:
+            - $ref: '#/components/schemas/Quotation'
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        xinput:
+          allOf:
+            - $ref: '#/components/schemas/XInput'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Organization:
+      type: object
+      properties:
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        address:
+          allOf:
+            - $ref: '#/components/schemas/Address'
+        state:
+          allOf:
+            - $ref: '#/components/schemas/State'
+        city:
+          allOf:
+            - $ref: '#/components/schemas/City'
+        contact:
+          $ref: '#/components/schemas/Contact'
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+        collected_by:
+        url:
+          type: string
+          format: uri
+        params:
+          type: object
+          properties:
+            transaction_id:
+              type: string
+            amount:
+              type: string
+            currency:
+              type: string
+            bank_code:
+              type: string
+            bank_account_number:
+              type: string
+            virtual_payment_address:
+              type: string
+            source_bank_code:
+              type: string
+            source_bank_account_number:
+              type: string
+            source_virtual_payment_address:
+              type: string
+        type:
+          type: string
+          enum:
+            - PRE-ORDER
+            - PRE-FULFILLMENT
+            - ON-FULFILLMENT
+            - POST-FULFILLMENT
+        status:
+          type: string
+          enum:
+            - PAID
+            - NOT-PAID
+        time:
+          $ref: '#/components/schemas/Time'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+          format: uri
+        name:
+          type: string
+        image:
+          $ref: '#/components/schemas/Image'
+        age:
+          allOf:
+            - $ref: '#/components/schemas/Duration'
+        dob:
+          type: string
+          format: date
+        gender:
+          type: string
+        creds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Credential'
+        languages:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              name:
+                type: string
+        skills:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              name:
+                type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Price:
+      type: object
+      properties:
+        currency:
+          type: string
+        value:
+          $ref: '#/components/schemas/DecimalValue'
+        estimated_value:
+          $ref: '#/components/schemas/DecimalValue'
+        computed_value:
+          $ref: '#/components/schemas/DecimalValue'
+        listed_value:
+          $ref: '#/components/schemas/DecimalValue'
+        offered_value:
+          $ref: '#/components/schemas/DecimalValue'
+        minimum_value:
+          $ref: '#/components/schemas/DecimalValue'
+        maximum_value:
+          $ref: '#/components/schemas/DecimalValue'
+    Provider:
+      type: object
+      properties:
+        id:
+          type: string
+        descriptor:
+          $ref: '#/components/schemas/Descriptor'
+        category_id:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating/properties/value'
+        time:
+          $ref: '#/components/schemas/Time'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        fulfillments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offer'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        exp:
+          type: string
+          format: date-time
+        rateable:
+          type: boolean
+        ttl:
+          type: integer
+          minimum: -1
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagGroup'
+    Quotation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        price:
+          allOf:
+            - $ref: '#/components/schemas/Price'
+        breakup:
+          type: array
+          items:
+            type: object
+            properties:
+              item:
+                $ref: '#/components/schemas/Item'
+              title:
+                type: string
+              price:
+                $ref: '#/components/schemas/Price'
+        ttl:
+          $ref: '#/components/schemas/Duration'
+    Rating:
+      type: object
+      properties:
+        rating_category:
+          type: string
+          enum:
+            - Item
+            - Order
+            - Fulfillment
+            - Provider
+            - Agent
+            - Support
+        id:
+          type: string
+        value:
+          type: string
+    Region:
+      type: object
+      properties:
+        dimensions:
+          type: string
+          enum:
+            - '1'
+            - '2'
+            - '3'
+        type:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        boundary:
+          type: string
+        map_url:
+          type: string
+    ReplacementTerm:
+      type: object
+      properties:
+        fulfillment_state:
+          allOf:
+            - $ref: '#/components/schemas/State'
+        replace_within:
+          allOf:
+            - $ref: '#/components/schemas/Time'
+        external_ref:
+          $ref: '#/components/schemas/MediaFile'
+    ReturnTerm:
+      type: object
+      properties:
+        fulfillment_state:
+          allOf:
+            - $ref: '#/components/schemas/State'
+        return_eligible:
+          type: boolean
+        return_time:
+          allOf:
+            - $ref: '#/components/schemas/Time'
+        return_location:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+        fulfillment_managed_by:
+          type: string
+          enum:
+            - CONSUMER
+            - PROVIDER
+    Scalar:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - CONSTANT
+            - VARIABLE
+        value:
+          $ref: '#/components/schemas/DecimalValue'
+        estimated_value:
+          $ref: '#/components/schemas/DecimalValue'
+        computed_value:
+          $ref: '#/components/schemas/DecimalValue'
+        range:
+          type: object
+          properties:
+            min:
+              $ref: '#/components/schemas/DecimalValue'
+            max:
+              $ref: '#/components/schemas/DecimalValue'
+        unit:
+          type: string
+    Schedule:
+      type: object
+      properties:
+        frequency:
+          $ref: '#/components/schemas/Duration'
+        holidays:
+          type: array
+          items:
+            type: string
+            format: date-time
+        times:
+          type: array
+          items:
+            type: string
+            format: date-time
+    State:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+    Stop:
+      type: object
+      properties:
+        id:
+          type: string
+        parent_stop_id:
+          type: string
+        location:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+        type:
+          type: string
+        time:
+          allOf:
+            - $ref: '#/components/schemas/Time'
+        instructions:
+          allOf:
+            - $ref: '#/components/schemas/Descriptor'
+        contact:
+          allOf:
+            - $ref: '#/components/schemas/Contact'
+        person:
+          allOf:
+            - $ref: '#/components/schemas/Person'
+        authorization:
+          $ref: '#/components/schemas/Authorization'
+    Support:
+      type: object
+      properties:
+        ref_id:
+          type: string
+        callback_phone:
+          type: string
+          format: phone
+        phone:
+          type: string
+          format: phone
+        email:
+          type: string
+          format: email
+        url:
+          type: string
+          format: uri
+    Tag:
+      type: object
+      properties:
+        descriptor:
+          allOf:
+            - $ref: '#/components/schemas/Descriptor'
+        value:
+          type: string
+        display:
+          type: boolean
+    TagGroup:
+      type: object
+      properties:
+        display:
+          type: boolean
+          default: true
+        descriptor:
+          allOf:
+            - $ref: '#/components/schemas/Descriptor'
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    Time:
+      type: object
+      properties:
+        label:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        duration:
+          $ref: '#/components/schemas/Duration'
+        range:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+        days:
+          type: string
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+    Tracking:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+          format: uri
+        location:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+    Vehicle:
+      type: object
+      properties:
+        category:
+          type: string
+        capacity:
+          type: integer
+        make:
+          type: string
+        model:
+          type: string
+        size:
+          type: string
+        variant:
+          type: string
+        color:
+          type: string
+        energy_type:
+          type: string
+        registration:
+          type: string
+        wheels_count:
+          type: string
+        cargo_volumne:
+          type: string
+        wheelchair_access:
+          type: string
+        code:
+          type: string
+        emission_standard:
+          type: string
+    XInput:
+      type: object
+      properties:
+        form:
+          $ref: '#/components/schemas/Form'
+        required:
+          type: boolean
